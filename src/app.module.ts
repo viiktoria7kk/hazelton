@@ -8,9 +8,9 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+      envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/hezelton'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     ApartamentModule,
   ],
   controllers: [AppController, ApartamentController],
