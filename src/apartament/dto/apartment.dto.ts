@@ -14,6 +14,3 @@ export class UpdateApartmentDto {
   readonly isEmpty: boolean;
 }
 
-export class CountEmptyApartmentsDto {
-  readonly count: number;
-}
