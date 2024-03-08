@@ -10,7 +10,7 @@ export class ApartmentsService {
     private readonly apartmentModel: Model<Apartments>,
   ) {}
 
-  async getEmptyApartmentsCount(): Promise<number> {
-    return this.apartmentModel.countDocuments({ isBooked: false }).exec();
+  async getAvailableApartmentsCount(): Promise<number> {
+    return this.apartmentModel.countDocuments({ isAvailable: true }).exec();
   }
 }

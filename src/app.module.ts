@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { ApartamentController } from './apartament/apartament.controller';
-import { ApartamentModule } from './apartament/apartament.module';
+import { ApartmentModule } from './apartment/apartment.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { ApartmentsModule } from './apartments/apartments.module';
@@ -12,10 +10,8 @@ import { ApartmentsModule } from './apartments/apartments.module';
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
     MongooseModule.forRoot(process.env.MONGO_URI),
-    ApartamentModule,
+    ApartmentModule,
     ApartmentsModule,
   ],
-  controllers: [AppController, ApartamentController],
-  providers: [],
 })
 export class AppModule {}

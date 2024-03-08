@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { ApartamentService } from './apartament.service';
-import { ApartamentController } from './apartament.controller';
+import { ApartmentService } from './apartment.service';
+import { ApartamentController } from './apartment.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ApartmentSchema } from './schemas/apartment.schema';
 
 @Module({
   controllers: [ApartamentController],
-  providers: [ApartamentService],
+  providers: [ApartmentService],
   imports: [
     MongooseModule.forFeature([{ name: 'Apartment', schema: ApartmentSchema }]),
   ],
 })
-export class ApartamentModule {}
+export class ApartmentModule {}

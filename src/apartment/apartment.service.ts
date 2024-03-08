@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 
 
 @Injectable()
-export class ApartamentService {
+export class ApartmentService {
   constructor(
     @InjectModel(Apartment.name) private apartmentModel: Model<Apartment>,
   ) {}
@@ -20,7 +20,7 @@ export class ApartamentService {
 
   async createApartment(apartment: Apartment): Promise<Apartment> {
     const newApartment = new this.apartmentModel(apartment);
-    return newApartment.save();
+    return await newApartment.save();
   }
 
   async updateApartment(id: string, apartment: Apartment): Promise<Apartment> {

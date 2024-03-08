@@ -1,3 +1,3 @@
-export class CountEmptyApartmentsDto {
+export class CountAvailableApartmentsDto {
   readonly count: number;
 }

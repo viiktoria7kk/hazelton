@@ -11,7 +11,7 @@ export class Apartment {
   name: string;
 
   @Prop({ required: true })
-  isEmpty: boolean;
+  isAvailable: boolean;
 }
 
 export const ApartmentSchema = SchemaFactory.createForClass(Apartment);
