@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import mongoose from 'mongoose';
 
 export type RoleDocument = Role & Document;
 
@@ -18,6 +19,9 @@ export class Role {
   })
   @Prop()
   description: string;
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId }] })
+  users: string[];
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);
