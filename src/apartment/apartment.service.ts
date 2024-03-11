@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Apartment } from './schemas/apartment.schema';
+import { Apartment } from './model/apartment.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-
 
 @Injectable()
 export class ApartmentService {

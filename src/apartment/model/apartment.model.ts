@@ -9,11 +9,19 @@ export class Apartment {
   @Prop()
   id: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({
+    required: true,
+    description: 'The apartment name',
+    example: 'Apartment 1',
+  })
   @Prop({ required: true })
   name: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({
+    required: true,
+    description: 'The apartment description',
+    example: 'This is the first apartment',
+  })
   @Prop({ required: true })
   isAvailable: boolean;
 }

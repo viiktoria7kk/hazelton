@@ -6,6 +6,7 @@ import { ApartmentsModule } from './apartments/apartments.module';
 import { AuthModule } from './auth/auth.module';
 import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from './user/user.module';
     ApartmentsModule,
     AuthModule,
     UserModule,
+    RolesModule,
   ],
   providers: [UserService],
 })

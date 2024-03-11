@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApartmentService } from './apartment.service';
-import { Apartment } from './schemas/apartment.schema';
+import { Apartment } from './model/apartment.model';
 import { ApartmentDTO } from './dto/apartment.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 

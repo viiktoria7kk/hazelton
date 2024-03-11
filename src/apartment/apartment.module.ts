@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ApartmentService } from './apartment.service';
 import { ApartamentController } from './apartment.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ApartmentSchema } from './schemas/apartment.schema';
+import { ApartmentSchema } from './model/apartment.model';
 
 @Module({
   controllers: [ApartamentController],
