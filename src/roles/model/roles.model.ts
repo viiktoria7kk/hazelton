@@ -20,8 +20,8 @@ export class Role {
   @Prop()
   description: string;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId }] })
-  users: string[];
+  // @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId }] })
+  // users: string[];
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);

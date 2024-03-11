@@ -20,7 +20,7 @@ import { RoleSchema } from './roles/model/roles.model';
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },
       { name: 'Role', schema: RoleSchema },
-      { name: 'UserRoles', schema: UserRolesSchema },
+      // { name: 'UserRoles', schema: UserRolesSchema },
     ]),
     ApartmentModule,
     ApartmentsModule,

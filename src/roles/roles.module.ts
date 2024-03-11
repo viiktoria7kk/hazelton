@@ -13,7 +13,7 @@ import { UserRolesSchema } from './model/user-roles.model';
     MongooseModule.forFeature([
       { name: 'Role', schema: RoleSchema },
       { name: 'User', schema: UserSchema },
-      { name: 'UserRoles', schema: UserRolesSchema },
+      // { name: 'UserRoles', schema: UserRolesSchema },
     ]),
   ],
 })
