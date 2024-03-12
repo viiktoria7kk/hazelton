@@ -8,7 +8,6 @@ import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
 import { RolesModule } from './roles/roles.module';
 import { UserSchema } from './user/model/user.model';
-import { UserRolesSchema } from './roles/model/user-roles.model';
 import { RoleSchema } from './roles/model/roles.model';
 
 @Module({
@@ -20,7 +19,6 @@ import { RoleSchema } from './roles/model/roles.model';
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },
       { name: 'Role', schema: RoleSchema },
-      // { name: 'UserRoles', schema: UserRolesSchema },
     ]),
     ApartmentModule,
     ApartmentsModule,

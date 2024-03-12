@@ -5,6 +5,7 @@ import { UserSchema } from './model/user.model';
 import { RoleSchema } from 'src/roles/model/roles.model';
 import { UserRolesSchema } from 'src/roles/model/user-roles.model';
 import { UserService } from './user.service';
+import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
   controllers: [UserController],
@@ -13,7 +14,9 @@ import { UserService } from './user.service';
       { name: 'User', schema: UserSchema },
       { name: 'Role', schema: RoleSchema },
     ]),
+    RolesModule,
   ],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

@@ -21,4 +21,11 @@ export class UserController {
   getAll() {
     return this.userService.getAllUsers();
   }
+
+  @ApiOperation({ summary: 'Get User By Username' })
+  @ApiResponse({ status: 200, type: CreateUserDTO })
+  @Get('/:username')
+  getByUsername(username: string) {
+    return this.userService.findByUsername(username);
+  }
 }
