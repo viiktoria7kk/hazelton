@@ -12,11 +12,11 @@ export class User {
 
   @ApiProperty({
     required: true,
-    description: 'The user name',
+    description: 'The user username',
     example: 'John Doe',
   })
-  @Prop({ required: true }) 
-  name: string;
+  @Prop({ required: true, unique: true })
+  username: string;
 
   @ApiProperty({
     required: true,
@@ -34,6 +34,13 @@ export class User {
   @Prop({ required: true })
   password: string;
 
+  @ApiProperty({
+    required: true,
+    description: 'The user role',
+    example: 'admin',
+  })
+  @Prop({ default: 'user', required: false })
+  role: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

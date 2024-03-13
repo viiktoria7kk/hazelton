@@ -9,7 +9,7 @@ export class Role {
   id: string;
 
   @ApiProperty({ example: 'admin', description: 'The role name' })
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   role: string;
 
   @ApiProperty({

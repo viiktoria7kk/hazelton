@@ -6,22 +6,29 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserSchema } from 'src/user/model/user.model';
 import { RoleSchema } from 'src/roles/model/roles.model';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthSchema } from './model/auth.model';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: `.${process.env.NODE_ENV}.env`,
+    }),
     UserModule,
     JwtModule.register({
       global: true,
       secret: process.env.SECRET,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '24h' },
     }),
 
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchema },
       { name: 'Role', schema: RoleSchema },
+      { name: 'Auth', schema: AuthSchema },
     ]),
   ],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

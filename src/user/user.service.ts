@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { User } from './model/user.model';
 import { InjectModel } from '@nestjs/mongoose';
@@ -25,6 +25,11 @@ export class UserService {
 
   async findByUsername(username: string) {
     const user = await this.userModel.findOne({ username });
+    return user;
+  }
+
+  async getByEmail(email: string) {
+    const user = await this.userModel.findOne({ email });
     return user;
   }
 }
