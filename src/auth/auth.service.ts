@@ -4,9 +4,6 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDTO } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/model/user.model';
-import { RoleName } from 'src/roles/role.enum';
-import { RoleDTO } from 'src/roles/dto/role.dto';
-import { Role } from 'src/roles/model/roles.model';
 
 @Injectable()
 export class AuthService {
@@ -21,24 +18,27 @@ export class AuthService {
   }
 
   async registration(userDto: CreateUserDTO) {
-    const candidate = await this.userService.getByEmail(userDto.email);
-    if (candidate) {
-      throw new UnauthorizedException('User with this email already exists');
+    try {
+      const candidate = await this.userService.getByEmail(userDto.email);
+      if (candidate) {
+        throw new UnauthorizedException('User with this email already exists');
+      }
+      const hashPassword = await bcrypt.hash(userDto.password, 5);
+      const user = await this.userService.createUser({
+        ...userDto,
+        password: hashPassword,
+      });
+      return this.generateToken(user);
+    } catch (error) {
+      throw error;
     }
-    const hashPassword = await bcrypt.hash(userDto.password, 5);
-    const user = await this.userService.createUser({
-      ...userDto,
-      password: hashPassword,
-    });
-
-    return this.generateToken(user);
   }
 
   private async generateToken(user: User) {
     const payload = {
       email: user.email,
       id: user.id,
-      roles: user.roles ? user.roles.map((role) => role.role) : [],
+      roles: user.roles ? user.roles.map((role) => role.role) : ['user'],
       secret: process.env.SECRET,
     };
     return {

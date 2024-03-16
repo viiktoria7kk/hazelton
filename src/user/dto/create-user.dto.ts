@@ -12,9 +12,22 @@ export class CreateUserDTO {
   @ApiProperty({ example: 'scdm$smck3343', description: 'The user password' })
   readonly password: string;
 
-  @Prop({ type: [{ type: () => Role }], default: [{
-    role: 'user',
-    description: 'user role',
-  }] })
+  @ApiProperty({
+    default: [
+      {
+        role: 'user',
+        description: 'user role',
+      },
+    ],
+  })
+  @Prop({
+    type: [{ type: () => Role }],
+    default: [
+      {
+        role: 'user',
+        description: 'user role',
+      },
+    ],
+  })
   roles: Role[];
 }
