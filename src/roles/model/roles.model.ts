@@ -1,22 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { Document } from 'mongoose';
 
 export type RoleDocument = Role & Document;
 
 @Schema()
-export class Role {
-  @Prop()
-  id: string;
-
+export class Role extends Document {
   @ApiProperty({ example: 'admin', description: 'The role name' })
-  @Prop({ required: true })
+  @Prop({ default: 'user' })
   role: string;
 
   @ApiProperty({
     example: 'This is the admin role',
     description: 'The role description',
   })
-  @Prop()
+  @Prop({ default: 'role description' })
   description: string;
 }
 

@@ -1,8 +1,6 @@
-import { Prop } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Role } from 'src/roles/model/roles.model';
 
-export class CreateUserDTO {
+export class AuthDTO {
   @ApiProperty({ example: 'example', description: 'The user username' })
   readonly username: string;
 
@@ -12,9 +10,6 @@ export class CreateUserDTO {
   @ApiProperty({ example: 'scdm$smck3343', description: 'The user password' })
   readonly password: string;
 
-  @Prop({ type: [{ type: () => Role }], default: [{
-    role: 'user',
-    description: 'user role',
-  }] })
-  roles: Role[];
+  @ApiProperty({ example: 'admin', description: 'The user role' })
+  readonly role: string;
 }

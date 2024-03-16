@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
-import { UserSchema } from 'src/user/model/user.model';
+import { User, UserSchema } from 'src/user/model/user.model';
 import { RoleSchema } from 'src/roles/model/roles.model';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthSchema } from './model/auth.model';
@@ -16,7 +16,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
-    UserModule,
+    forwardRef(() => UserModule),
     JwtModule.register({
       global: true,
       secret: process.env.SECRET,

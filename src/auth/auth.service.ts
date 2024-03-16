@@ -2,7 +2,11 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDTO } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/model/user.model';
+import { RoleName } from 'src/roles/role.enum';
+import { RoleDTO } from 'src/roles/dto/role.dto';
+import { Role } from 'src/roles/model/roles.model';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +15,12 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async registration(userDto: User) {
+  async login(userDto: CreateUserDTO) {
+    const user = await this.validateUser(userDto);
+    return this.generateToken(user);
+  }
+
+  async registration(userDto: CreateUserDTO) {
     const candidate = await this.userService.getByEmail(userDto.email);
     if (candidate) {
       throw new UnauthorizedException('User with this email already exists');
@@ -21,12 +30,31 @@ export class AuthService {
       ...userDto,
       password: hashPassword,
     });
+
     return this.generateToken(user);
   }
-  async generateToken(user: User) {
-    const payload = { email: user.email, id: user.id, role: user.role, secret: process.env.SECRET};
+
+  private async generateToken(user: User) {
+    const payload = {
+      email: user.email,
+      id: user.id,
+      roles: user.roles ? user.roles.map((role) => role.role) : [],
+      secret: process.env.SECRET,
+    };
     return {
       token: this.jwtService.sign(payload),
     };
+  }
+
+  private async validateUser(userDto: CreateUserDTO) {
+    const user = await this.userService.getByEmail(userDto.email);
+    const passwordEquals = await bcrypt.compare(
+      userDto.password,
+      user.password,
+    );
+    if (user && passwordEquals) {
+      return user;
+    }
+    throw new UnauthorizedException('Incorrect email or password');
   }
 }

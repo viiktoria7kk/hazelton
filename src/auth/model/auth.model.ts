@@ -2,21 +2,28 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
 
-export type UserDocument = Auth & Document;
+export type AuthDocument = Auth & Document;
 
 @Schema()
 export class Auth {
-  @ApiProperty()
   @Prop()
   id: string;
 
   @ApiProperty({
     required: true,
-    description: 'The user name',
+    description: 'The user username',
     example: 'John Doe',
   })
-  @Prop({ required: true })
-  name: string;
+  @Prop({ required: true, unique: true })
+  username: string;
+
+  @ApiProperty({
+    required: true,
+    description: 'The user email address',
+    example: 'example@gmail.com',
+  })
+  @Prop({ required: true, unique: true })
+  email: string;
 
   @ApiProperty({
     required: true,
@@ -25,6 +32,14 @@ export class Auth {
   })
   @Prop({ required: true })
   password: string;
+
+  @ApiProperty({
+    required: true,
+    description: 'The user role',
+    example: 'admin',
+  })
+  @Prop({ default: 'user', required: false })
+  role: string;
 }
 
 export const AuthSchema = SchemaFactory.createForClass(Auth);

@@ -1,12 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { Document } from 'mongoose';
-
-export type UserDocument = User & Document;
+import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Role } from 'src/roles/model/roles.model';
 
 @Schema()
-export class User {
-  @ApiProperty()
+export class User extends Document {
   @Prop()
   id: string;
 
@@ -34,13 +32,8 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  @ApiProperty({
-    required: true,
-    description: 'The user role',
-    example: 'admin',
-  })
-  @Prop({ default: 'user', required: false })
-  role: string;
+  @Prop({ type: [{ type: () => Role }] })
+  roles: Role[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

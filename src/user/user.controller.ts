@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles-auth.decorator';
+import { RoleGuard } from 'src/auth/guards/roles.guard';
+import { RoleName } from 'src/roles/role.enum';
 
 @ApiTags('user')
 @Controller('user')
@@ -17,6 +20,8 @@ export class UserController {
 
   @ApiOperation({ summary: 'Get All Users' })
   @ApiResponse({ status: 200, type: [CreateUserDTO] })
+  @Roles(RoleName.ADMIN)
+  @UseGuards(RoleGuard)
   @Get()
   getAll() {
     return this.userService.getAllUsers();
@@ -34,5 +39,25 @@ export class UserController {
   @Get('/:email')
   async getByEmail(@Param('email') email: string) {
     return this.userService.getByEmail(email);
+  }
+
+  @ApiOperation({ summary: 'Add Role To User' })
+  @ApiResponse({ status: 200, type: CreateUserDTO })
+  @Post('add-role/:userId/:roleId')
+  async addUserRole(
+    @Param('userId') userId: string,
+    @Param('roleId') roleId: string,
+  ) {
+    return this.userService.addUserRole(userId, roleId);
+  }
+
+  @ApiOperation({ summary: 'Remove Role From User' })
+  @ApiResponse({ status: 200, type: CreateUserDTO })
+  @Post('remove-role/:userId/:roleId')
+  async removeUserRole(
+    @Param('userId') userId: string,
+    @Param('roleId') roleId: string,
+  ) {
+    return this.userService.removeUserRole(userId, roleId);
   }
 }
