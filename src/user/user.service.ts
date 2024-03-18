@@ -15,7 +15,10 @@ export class UserService {
     try {
       const user = await this.userModel.findByIdAndUpdate(
         userId,
-        { $addToSet: { roles: { roleId } } },
+        {
+          $pull: { roles: { role: 'user' } },
+          $addToSet: { roles: { roleId } },
+        },
         { new: true },
       );
       return user;
@@ -47,8 +50,8 @@ export class UserService {
   }
   async createUser(dto: CreateUserDTO) {
     try {
-      const user = await this.userModel.create(dto); 
-      await this.addDefaultUserRole(user); 
+      const user = await this.userModel.create(dto);
+      await this.addDefaultUserRole(user);
       return user;
     } catch (error) {
       throw error;

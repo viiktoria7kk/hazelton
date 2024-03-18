@@ -1,4 +1,4 @@
-export enum RoleName {
-  USER = 'user',
-  ADMIN = 'admin',
+export class RoleName {
+  static readonly ADMIN = 'admin';
+  static readonly USER = 'user';
 }
