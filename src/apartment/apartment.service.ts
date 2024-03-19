@@ -66,4 +66,25 @@ export class ApartmentService {
       );
     }
   }
+
+  async reserveApartment(id: string): Promise<Apartment> {
+    try {
+      const updatedApartment = await this.apartmentModel.findByIdAndUpdate(
+        id,
+        { reserved: true },
+        { new: true },
+      );
+
+      if (!updatedApartment) {
+        throw new HttpException('Apartment not found', HttpStatus.NOT_FOUND);
+      }
+
+      return updatedApartment;
+    } catch (error) {
+      throw new HttpException(
+        `Error while reserving apartment: ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
 }

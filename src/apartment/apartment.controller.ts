@@ -19,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { Roles } from 'src/decorators/roles-auth.decorator';
 import { RoleGuard } from 'src/guards/roles.guard';
+import { JwtAuthGuard } from 'src/guards/auth.guard';
 
 @ApiTags('apartment')
 @Controller('apartment')
@@ -72,5 +73,14 @@ export class ApartamentController {
   @Delete(':id')
   async deleteApartment(@Param('id') id: string): Promise<Apartment> {
     return this.apartmentService.deleteApartment(id);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Reserve Apartment' })
+  @ApiResponse({ status: 200, type: Apartment })
+  @UseGuards(JwtAuthGuard)
+  @Post('reserve/:id')
+  async reserveApartment(id: string): Promise<Apartment> {
+    return this.apartmentService.reserveApartment(id);
   }
 }
