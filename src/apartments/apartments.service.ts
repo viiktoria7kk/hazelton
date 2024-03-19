@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Apartments } from './model/apartments.model';
 import { Model } from 'mongoose';
@@ -11,6 +11,13 @@ export class ApartmentsService {
   ) {}
 
   async getAvailableApartmentsCount(): Promise<number> {
-    return this.apartmentModel.countDocuments({ isAvailable: true }).exec();
+    try {
+      return this.apartmentModel.countDocuments({ isAvailable: true }).exec();
+    } catch (error) {
+      throw new HttpException(
+        `Error while get count of available apartmns ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

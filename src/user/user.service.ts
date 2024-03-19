@@ -11,65 +11,53 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private rolesService: RolesService,
   ) {}
-  async addUserRole(userId: string, roleId: string): Promise<User> {
-    try {
-      const user = await this.userModel.findByIdAndUpdate(
-        userId,
-        {
-          $pull: { roles: { role: 'user' } },
-          $addToSet: { roles: { roleId } },
-        },
-        { new: true },
-      );
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
 
-  async addDefaultUserRole(user: User): Promise<User> {
-    try {
-      const role = await this.rolesService.getRoleByValue('user');
-      if (!role) {
-        throw new HttpException('Role not found', HttpStatus.NOT_FOUND);
-      }
-      user.roles.push(role.id);
-      await user.save();
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async removeUserRole(userId: string, roleId: string): Promise<User> {
-    return this.userModel.findByIdAndUpdate(
-      userId,
-      { $pull: { roles: roleId } },
-      { new: true },
-    );
-  }
-  async createUser(dto: CreateUserDTO) {
+  async createUser(dto: CreateUserDTO): Promise<User> {
     try {
       const user = await this.userModel.create(dto);
-      await this.addDefaultUserRole(user);
+      await this.rolesService.addDefaultUserRole(user);
       return user;
     } catch (error) {
-      throw error;
+      throw new HttpException(
+        `Error while create user: ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
-  async getAllUsers() {
-    const users = await this.userModel.find();
-    return users;
+  async getAllUsers(): Promise<User[]> {
+    try {
+      const users = await this.userModel.find();
+      return users;
+    } catch (error) {
+      throw new HttpException(
+        `Error while get all users: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  async findByUsername(username: string) {
-    const user = await this.userModel.findOne({ username });
-    return user;
+  async getByUsername(username: string): Promise<User> {
+    try {
+      const user = await this.userModel.findOne({ username });
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        `Error while get user by username: ${error.message}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
-  async getByEmail(email: string) {
-    const user = await this.userModel.findOne({ email });
-    return user;
+  async getByEmail(email: string): Promise<User> {
+    try {
+      const user = await this.userModel.findOne({ email });
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        `Error while get user by email: ${error.message}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }

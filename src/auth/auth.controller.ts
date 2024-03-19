@@ -12,7 +12,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Return token' })
   @HttpCode(HttpStatus.OK)
   @Post('/login')
-  login(@Body() userDto: CreateUserDTO) {
+  async login(@Body() userDto: CreateUserDTO): Promise<{ token: string }> {
     return this.authService.login(userDto);
   }
 
@@ -20,7 +20,9 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Return token' })
   @HttpCode(HttpStatus.OK)
   @Post('/registration')
-  registration(@Body() userDto: CreateUserDTO) {
+  async registration(
+    @Body() userDto: CreateUserDTO,
+  ): Promise<{ token: string }> {
     return this.authService.registration(userDto);
   }
 }

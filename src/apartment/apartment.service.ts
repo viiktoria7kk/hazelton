@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Apartment } from './model/apartment.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,23 +10,60 @@ export class ApartmentService {
   ) {}
 
   async getAllApartments(): Promise<Apartment[]> {
-    return this.apartmentModel.find().exec();
+    try {
+      return this.apartmentModel.find().exec();
+    } catch (error) {
+      throw new HttpException(
+        `Error while get all apartments ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async getApartmentById(id: string): Promise<Apartment> {
-    return this.apartmentModel.findById(id);
+    try {
+      return this.apartmentModel.findById(id);
+    } catch (error) {
+      throw new HttpException(
+        `Error while get apartment by id ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async createApartment(apartment: Apartment): Promise<Apartment> {
-    const newApartment = new this.apartmentModel(apartment);
-    return await newApartment.save();
+    try {
+      const newApartment = new this.apartmentModel(apartment);
+      return await newApartment.save();
+    } catch (error) {
+      throw new HttpException(
+        `Error while create apartment  ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async updateApartment(id: string, apartment: Apartment): Promise<Apartment> {
-    return this.apartmentModel.findByIdAndUpdate(id, apartment, { new: true });
+    try {
+      return this.apartmentModel.findByIdAndUpdate(id, apartment, {
+        new: true,
+      });
+    } catch (error) {
+      throw new HttpException(
+        `Error while update apartment  ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async deleteApartment(id: string): Promise<Apartment> {
-    return this.apartmentModel.findByIdAndDelete(id);
+    try {
+      return this.apartmentModel.findByIdAndDelete(id);
+    } catch (error) {
+      throw new HttpException(
+        `Error while delete apartment  ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

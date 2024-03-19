@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
@@ -12,12 +17,19 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(userDto: CreateUserDTO) {
-    const user = await this.validateUser(userDto);
-    return this.generateToken(user);
+  async login(userDto: CreateUserDTO): Promise<{ token: string }> {
+    try {
+      const user = await this.validateUser(userDto);
+      return this.generateToken(user);
+    } catch (error) {
+      throw new HttpException(
+        `Error while login: ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
-  async registration(userDto: CreateUserDTO) {
+  async registration(userDto: CreateUserDTO): Promise<{ token: string }> {
     try {
       const candidate = await this.userService.getByEmail(userDto.email);
       if (candidate) {
@@ -30,31 +42,48 @@ export class AuthService {
       });
       return this.generateToken(user);
     } catch (error) {
-      throw error;
+      throw new HttpException(
+        `Error while registration: ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
-  private async generateToken(user: User) {
-    const payload = {
-      email: user.email,
-      id: user.id,
-      roles: user.roles ? user.roles.map((role) => role.role) : ['user'],
-      secret: process.env.SECRET,
-    };
-    return {
-      token: this.jwtService.sign(payload),
-    };
+  private async generateToken(user: User): Promise<{ token: string }> {
+    try {
+      const payload = {
+        email: user.email,
+        id: user.id,
+        roles: user.roles ? user.roles.map((role) => role.role) : ['user'],
+        secret: process.env.SECRET,
+      };
+      return {
+        token: this.jwtService.sign(payload),
+      };
+    } catch (error) {
+      throw new HttpException(
+        `Error while generating token: ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
-  private async validateUser(userDto: CreateUserDTO) {
-    const user = await this.userService.getByEmail(userDto.email);
-    const passwordEquals = await bcrypt.compare(
-      userDto.password,
-      user.password,
-    );
-    if (user && passwordEquals) {
-      return user;
+  private async validateUser(userDto: CreateUserDTO): Promise<User> {
+    try {
+      const user = await this.userService.getByEmail(userDto.email);
+      const passwordEquals = await bcrypt.compare(
+        userDto.password,
+        user.password,
+      );
+      if (user && passwordEquals) {
+        return user;
+      }
+      throw new UnauthorizedException('Incorrect email or password');
+    } catch (error) {
+      throw new HttpException(
+        `Error while validate user: ${error.message}`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    throw new UnauthorizedException('Incorrect email or password');
   }
 }
