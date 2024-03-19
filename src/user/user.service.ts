@@ -60,4 +60,17 @@ export class UserService {
       );
     }
   }
+  
+  async banUser(userId: string): Promise<User> {
+    try {
+      const user = await this.userModel.findById(userId);
+      user.banned = true;
+      return user.save();
+    } catch (error) {
+      throw new HttpException(
+        `Error while ban user: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

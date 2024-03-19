@@ -7,8 +7,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { RoleGuard } from 'src/guards/roles.guard';
-import { Roles } from 'src/decorators/roles-auth.decorator';
+import { RoleGuard } from 'src/common/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles-auth.decorator';
 import { User } from './model/user.model';
 
 @ApiTags('user')
@@ -51,5 +51,15 @@ export class UserController {
   @Get('/:email')
   async getByEmail(@Param('email') email: string) {
     return this.userService.getByEmail(email);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Ban User' })
+  @ApiResponse({ status: 200, type: User })
+  @Roles('admin')
+  @UseGuards(RoleGuard)
+  @Post('ban/:userId')
+  async banUser(@Param('userId') userId: string): Promise<User> {
+    return this.userService.banUser(userId);
   }
 }

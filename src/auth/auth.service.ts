@@ -52,9 +52,11 @@ export class AuthService {
   private async generateToken(user: User): Promise<{ token: string }> {
     try {
       const payload = {
-        email: user.email,
         id: user.id,
+        username: user.username,
+        email: user.email,
         roles: user.roles ? user.roles.map((role) => role.role) : ['user'],
+        banned: user.banned,
         secret: process.env.SECRET,
       };
       return {

@@ -17,9 +17,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Roles } from 'src/decorators/roles-auth.decorator';
-import { RoleGuard } from 'src/guards/roles.guard';
-import { JwtAuthGuard } from 'src/guards/auth.guard';
+import { Roles } from 'src/common/decorators/roles-auth.decorator';
+import { RoleGuard } from 'src/common/guards/roles.guard';
+import { JwtAuthGuard } from 'src/common/guards/auth.guard';
 
 @ApiTags('apartment')
 @Controller('apartment')

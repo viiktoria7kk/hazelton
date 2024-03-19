@@ -8,8 +8,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateUserDTO } from 'src/user/dto/create-user.dto';
-import { Roles } from 'src/decorators/roles-auth.decorator';
-import { RoleGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles-auth.decorator';
+import { RoleGuard } from 'src/common/guards/roles.guard';
 import { User } from 'src/user/model/user.model';
 import { Role } from './model/roles.model';
 
