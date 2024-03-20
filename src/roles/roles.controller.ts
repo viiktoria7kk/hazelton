@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDTO } from './dto/create-role.dto';
 import {
@@ -24,7 +32,7 @@ export class RolesController {
   @Roles('admin')
   @UseGuards(RoleGuard)
   @Post()
-  createRole(@Body() dto: CreateRoleDTO): Promise<Role> {
+  async createRole(@Body() dto: CreateRoleDTO): Promise<Role> {
     return this.rolesService.createRole(dto);
   }
 
@@ -34,18 +42,11 @@ export class RolesController {
   @Roles('admin')
   @UseGuards(RoleGuard)
   @Post('add-role/:userId/:roleId')
-  addUserRole(
+  async addUserRole(
     @Param('userId') userId: string,
     @Param('roleId') roleId: string,
   ): Promise<User> {
     return this.rolesService.addUserRole(userId, roleId);
-  }
-
-  @ApiOperation({ summary: 'Add Default Role To User' })
-  @ApiResponse({ status: 200, type: CreateUserDTO })
-  @Post('add-default-role')
-  addDefaultUserRole(user: User): Promise<User> {
-    return this.rolesService.addDefaultUserRole(user);
   }
 
   @ApiBearerAuth()
@@ -54,7 +55,7 @@ export class RolesController {
   @Roles('admin')
   @UseGuards(RoleGuard)
   @Get()
-  getAllRoles(): Promise<Role[]> {
+  async getAllRoles(): Promise<Role[]> {
     return this.rolesService.getAllRoles();
   }
 
@@ -64,7 +65,7 @@ export class RolesController {
   @Roles('admin')
   @UseGuards(RoleGuard)
   @Get('/:value')
-  getRoleByValue(@Param('value') value: string): Promise<Role> | null {
+  async getRoleByValue(@Param('value') value: string): Promise<Role> | null {
     return this.rolesService.getRoleByValue(value);
   }
 
@@ -73,8 +74,11 @@ export class RolesController {
   @ApiResponse({ status: 200, type: User })
   @Roles('admin')
   @UseGuards(RoleGuard)
-  @Post('remove-role/:userId/:roleId')
-  removeUserRole(userId: string, roleId: string): Promise<User> {
-    return this.rolesService.removeUserRole(userId, roleId);
+  @Delete('remove-role/:userId/:roleId')
+  async removeUserRole(
+    @Param('userId') userId: string,
+    @Param('roleId') roleId: string,
+  ): Promise<User> {
+    return await this.rolesService.removeUserRole(userId, roleId);
   }
 }

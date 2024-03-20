@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsString } from 'class-validator';
 
 export type ApartmentDocument = Apartment & Document;
 
@@ -9,6 +10,7 @@ export class Apartment {
   @Prop()
   id: string;
 
+  @IsString()
   @ApiProperty({
     required: true,
     description: 'The apartment name',
@@ -17,6 +19,7 @@ export class Apartment {
   @Prop({ required: true })
   name: string;
 
+  @IsBoolean()
   @ApiProperty({
     required: true,
     description: 'The apartment description',

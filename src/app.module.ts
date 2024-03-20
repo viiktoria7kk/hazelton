@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { ApartmentModule } from './apartment/apartment.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
@@ -20,6 +20,7 @@ import { RoleSchema } from './roles/model/roles.model';
       { name: 'User', schema: UserSchema },
       { name: 'Role', schema: RoleSchema },
     ]),
+    
     ApartmentModule,
     ApartmentsModule,
     AuthModule,

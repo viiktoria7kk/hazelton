@@ -54,7 +54,7 @@ export class UserController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Ban User' })
+  @ApiOperation({ summary: 'Ban User'})
   @ApiResponse({ status: 200, type: User })
   @Roles('admin')
   @UseGuards(RoleGuard)

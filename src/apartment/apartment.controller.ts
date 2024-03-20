@@ -80,7 +80,7 @@ export class ApartamentController {
   @ApiResponse({ status: 200, type: Apartment })
   @UseGuards(JwtAuthGuard)
   @Post('reserve/:id')
-  async reserveApartment(id: string): Promise<Apartment> {
+  async reserveApartment(@Param('id') id: string): Promise<Apartment> {
     return this.apartmentService.reserveApartment(id);
   }
 }

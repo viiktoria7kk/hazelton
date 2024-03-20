@@ -30,11 +30,13 @@ export class RolesService {
 
   async addUserRole(userId: string, roleId: string): Promise<User> {
     try {
+      const role = await this.roleModel.findById(roleId);
+      const roleName = role.role;
+
       const user = await this.userModel.findByIdAndUpdate(
         userId,
         {
-          $pull: { roles: { role: 'user' } },
-          $addToSet: { roles: { roleId } },
+          $addToSet: { roles: { role: roleName } },
         },
         { new: true },
       );
@@ -93,11 +95,13 @@ export class RolesService {
 
   async removeUserRole(userId: string, roleId: string): Promise<User> {
     try {
-      return this.userModel.findByIdAndUpdate(
-        userId,
-        { $pull: { roles: roleId } },
+      await this.userModel.findOneAndUpdate(
+        { _id: userId },
+        { $pull: { roles: { _id: roleId } } },
         { new: true },
       );
+      const user = await this.userModel.findById(userId);
+      return user;
     } catch (error) {
       throw new HttpException(
         `Error removing role: ${error.message}`,

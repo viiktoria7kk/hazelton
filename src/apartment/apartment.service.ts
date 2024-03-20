@@ -71,7 +71,7 @@ export class ApartmentService {
     try {
       const updatedApartment = await this.apartmentModel.findByIdAndUpdate(
         id,
-        { reserved: true },
+        { isAvailable: true },
         { new: true },
       );
 

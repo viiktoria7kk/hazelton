@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsString, Length } from 'class-validator';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Role } from 'src/roles/model/roles.model';
 
@@ -19,7 +19,7 @@ export class User extends Document {
   @Prop({ required: true, unique: true })
   username: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'Invalid email address' })
   @ApiProperty({
     required: true,
     description: 'The user email address',
@@ -29,6 +29,7 @@ export class User extends Document {
   email: string;
 
   @IsString()
+  @Length(4, 20)
   @ApiProperty({
     required: true,
     description: 'The user password',
@@ -37,7 +38,6 @@ export class User extends Document {
   @Prop({ required: true })
   password: string;
 
-  @IsString()
   @ApiProperty({
     default: [
       {
@@ -50,7 +50,6 @@ export class User extends Document {
   @Prop({ type: [{ type: () => Role }] })
   roles: Role[];
 
-  @IsBoolean()
   @ApiProperty({
     default: false,
     description: 'The user banned status',

@@ -1,6 +1,6 @@
 import { Prop } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsString, Length } from 'class-validator';
 import { Role } from 'src/roles/model/roles.model';
 
 export class CreateUserDTO {
@@ -8,23 +8,15 @@ export class CreateUserDTO {
   @ApiProperty({ example: 'example', description: 'The user username' })
   readonly username: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'Invalid email address' })
   @ApiProperty({ example: 'example@gmail.com', description: 'The user email' })
   readonly email: string;
 
   @IsString()
+  @Length(4, 20)
   @ApiProperty({ example: 'scdm$smck3343', description: 'The user password' })
   readonly password: string;
 
-  @IsString()
-  @ApiProperty({
-    default: [
-      {
-        role: 'user',
-        description: 'user role',
-      },
-    ],
-  })
   @Prop({
     type: [{ type: () => Role }],
     default: [
@@ -36,8 +28,6 @@ export class CreateUserDTO {
   })
   roles: Role[];
 
-  @IsBoolean()
-  @ApiProperty({ default: false, description: 'The user banned status' })
   @Prop({ default: false })
   readonly banned: boolean;
 }
